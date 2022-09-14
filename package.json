@@ -1,0 +1,24 @@
+{
+  "name": "youtube-heatmap",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WillianAgostini/youtube-heatmap.git"
+  },
+  "author": "Willian Carlos Agostini",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/WillianAgostini/youtube-heatmap/issues"
+  },
+  "homepage": "https://github.com/WillianAgostini/youtube-heatmap#readme",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.12",
+    "puppeteer": "^17.1.3"
+  },
+  "type": "module"
+}
