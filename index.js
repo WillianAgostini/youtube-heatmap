@@ -1,10 +1,5 @@
-import cheerio from "cheerio";
+import { load } from "cheerio";
 import puppeteer from "puppeteer";
-
-export async function getHeatMap(url) {
-  const html = await getHtml(url);
-  return getHeatMapFromHtml(html);
-}
 
 const cssHeatMapPath = ".ytp-heat-map-path";
 
@@ -16,13 +11,13 @@ async function getHtml(url, options) {
   await page?.waitForSelector(cssHeatMapPath, options);
 
   const html = await page.content();
-  await page?.close({ runBeforeUnload: true });
+  await page?.close();
   await browser?.close();
   return html;
 }
 
 function getHeatMapFromHtml(html) {
-  const $ = cheerio.load(html);
+  const $ = load(html);
   const d = $(cssHeatMapPath).map(function () {
     return $(this).attr("d");
   });
@@ -31,4 +26,9 @@ function getHeatMapFromHtml(html) {
     throw new Error(`Tag '${cssHeatMapPath}' not found or is empty.`);
 
   return d.toArray();
+}
+
+export async function getHeatMap(url) {
+  const html = await getHtml(url);
+  return getHeatMapFromHtml(html);
 }

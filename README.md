@@ -15,8 +15,7 @@ Every third `x,y` parameter after a `C`, where `x` ends with `5.0`, is a usable 
 
 ## Options
 
-Internally puppeteer is used, so you can pass optional parameters as the second parameter, they are
-documented [here](https://pptr.dev/next/api/puppeteer.waitforselectoroptions).
+Internally puppeteer is used, so you can pass optional parameters as the second parameter, they are documented [here](https://pptr.dev/next/api/puppeteer.waitforselectoroptions).
 
 
 ## JavaScript Usage
