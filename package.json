@@ -1,6 +1,6 @@
 {
   "name": "youtube-heatmap",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "Easily retrieve data about “most replayed” graph for videos on Youtube.",
   "main": "index.js",
   "scripts": {
@@ -10,6 +10,12 @@
     "type": "git",
     "url": "git+https://github.com/WillianAgostini/youtube-heatmap.git"
   },
+  "keywords": [
+    "youtube",
+    "url",
+    "heatmap",
+    "video"
+  ],
   "author": "Willian Carlos Agostini",
   "license": "ISC",
   "bugs": {
