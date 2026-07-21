@@ -6,7 +6,15 @@ Easily retrieve data about “most replayed” graph for videos on Youtube.
 
 ## Description
 
-YouTube's implementation on the web page is relatively straight forward and easy to extract (using an extension inject). A SVG tag on the page (`svg.ytp-heat-map-svg` 1000x100) contains a path defined with [cubic Bézier curves](https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d#cubic_b%C3%A9zier_curve) (a `C` followed by three `x,y` pairs).
+YouTube's player draws the “most replayed” graph as an SVG path on the watch
+page. In the current player the curve data lives in `path.ytp-modern-heat-map`
+(inside `svg.ytp-heat-map-svg`, 1000x100); the older `.ytp-heat-map-path`
+element still exists in the DOM but only as a permanently empty stub. This
+library matches both, waits until one of them actually contains data, and
+returns the raw path string(s).
+
+The path is defined with [cubic Bézier curves](https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d#cubic_b%C3%A9zier_curve)
+(a `C` followed by three `x,y` pairs).
 
 Every third `x,y` parameter after a `C`, where `x` ends with `5.0`, is a usable data point:
 
@@ -14,31 +22,42 @@ Every third `x,y` parameter after a `C`, where `x` ends with `5.0`, is a usable 
 
 `y` is the heat value for this time period. Just compute `(100-y)/100` for a value from 0 to 1.
 
-## Options
+## Usage
 
-Internally puppeteer is used, so you can pass optional parameters as the second parameter, they are documented [here](https://pptr.dev/next/api/puppeteer.waitforselectoroptions).
-
-
-## JavaScript Usage
+This is an ES module (`"type": "module"`), so use `import` — `require()` is
+not supported.
 
 ```javascript
-var search = require('youtube-heatmap');
+import { getHeatMap } from 'youtube-heatmap';
 
-getHeatMap('https://www.youtube.com/watch?v=_lEzN8C5c7k')
-    .then(heatMap => {
-        console.log(heatMap)
-    })
-
+const heatMap = await getHeatMap('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
+console.log(heatMap);
 ```
 
-## TypeScript Usage
+A TypeScript definition file is included so that `youtube-heatmap` can be used
+easily from TypeScript with the same API.
 
-A TypeScript definition file is included so that 'youtube-search' can be used
-easily from TypeScript.
+## Options
 
-```typescript
-import { getHeatMap } from 'youtube-heatmap'
+Internally puppeteer is used. An optional second parameter is forwarded to
+puppeteer's wait for the heat map data, e.g. to adjust the timeout (default
+30 seconds):
 
-const heatMap = await getHeatMap('https://www.youtube.com/watch?v=_lEzN8C5c7k')
-console.log(heatMap)
+```javascript
+const heatMap = await getHeatMap(url, { timeout: 60000 });
 ```
+
+If the video has no heat map (or YouTube changes its player markup again),
+the promise rejects — either with a timeout or with a "not found or is empty"
+error — rather than resolving with empty data.
+
+## Testing
+
+```bash
+npm test          # fast, deterministic suite against synthetic markup (no network)
+npm run test:live # end-to-end fetch of a real video's heat map
+```
+
+`npm run test:live` accepts an optional video URL argument. If the live test
+fails while `npm test` passes, YouTube has likely changed its player markup —
+check the heat map element's class name first.
