@@ -1,6 +1,6 @@
 {
   "name": "youtube-heatmap",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Easily retrieve data about “most replayed” graph for videos on Youtube.",
   "main": "index.js",
   "scripts": {
